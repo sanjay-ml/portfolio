@@ -1,62 +1,54 @@
-// Placeholder project slots 
+// Project placeholders
 const projects = [
-  { image: "https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&q=60&w=800", desc: "Project 1" },
-  { image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&q=60&w=800", desc: "Project 2" },
-  { image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&q=60&w=800", desc: "Project 3" },
-  { image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=60&w=800", desc: "Project 4" },
+  {
+    image: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=60",
+    text: "Future Project"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=60",
+    text: "Future Project"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=800&q=60",
+    text: "Future Project"
+  },
+  {
+    image: "https://images.unsplash.com/photo-1506765515384-028b60a970df?auto=format&fit=crop&w=800&q=60",
+    text: "Future Project"
+  }
 ];
 
-function createCard(p) {
-  const card = document.createElement('article');
-  card.className = 'card reveal';
-  card.innerHTML = `
-    <img class="card-img" src="${p.image}" alt="${p.desc} preview" loading="lazy" />
-    <div class="caption">${p.desc}</div>
-  `;
-  return card;
-}
-
 function renderProjects() {
-  const grid = document.getElementById('projects-grid');
+  const grid = document.getElementById("projects-grid");
   if (!grid) return;
-  const fragment = document.createDocumentFragment();
-  projects.forEach(p => fragment.appendChild(createCard(p)));
-  grid.appendChild(fragment);
+
+  projects.forEach(p => {
+    const card = document.createElement("article");
+    card.className = "card reveal";
+    card.innerHTML = `
+      <img class="card-img" src="${p.image}" alt="Project preview" loading="lazy">
+      <p class="caption">${p.text}</p>
+    `;
+    grid.appendChild(card);
+  });
 }
 
+// Scroll reveal animation
 function setupReveal() {
-  const els = document.querySelectorAll('.reveal');
-  if (!els.length) return;
-
-  const observer = new IntersectionObserver((entries, obs) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-        obs.unobserve(entry.target);
+        entry.target.classList.add("visible");
+        observer.unobserve(entry.target);
       }
     });
-  }, { threshold: 0.12 });
+  }, { threshold: 0.15 });
 
-  els.forEach(el => observer.observe(el));
+  document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
 }
 
-function initContactForm() {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const name = (form.name && form.name.value) ? form.name.value.trim() : 'Friend';
-    alert(`Thanks ${name}! This demo form doesn't send emails yet.`);
-    form.reset();
-  });
-
-  const resetBtn = document.getElementById('reset');
-  if (resetBtn) resetBtn.addEventListener('click', () => form.reset());
-}
-
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   renderProjects();
-  document.getElementById('year').textContent = new Date().getFullYear();
   setupReveal();
-  initContactForm();
+  document.getElementById("year").textContent = new Date().getFullYear();
 });
